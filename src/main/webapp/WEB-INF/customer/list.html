@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>List of customers</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assets/bootstrap/v5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
+    <link rel="stylesheet" href="/assets/css/custom-style.css">
+    <script src="/assets/jquery/jquery-3.7.1.min.js"></script>
+    <script src="/assets/jquery/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+    <header>
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+                <a class="navbar-brand">List of customers</a>
+                <div class="d-flex" style="gap: 10px;">
+                    <button class="btn btn-outline-light" type="button" onclick="showHistory()">
+                        <i class="fas fa-history"></i>
+                        Transfer histories
+                    </button>
+                    <button class="btn btn-outline-light" type="button" onclick="showCreateCustomer()">
+                        <i class="far fa-plus-square"></i>
+                        Add new customer
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="content">
+        <table class="table table-hover" id="tbCustomer">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>FullName</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Balance</th>
+                <th colspan="5">Action</th>
+            </tr>
+            </thead>
+            <tbody class="table table-hover">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Modal Create -->
+<div class="modal fade" id="modalCreate" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Modal create</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="row mb-3 mt-3">
+                        <div class="col-lg-6">
+                            <label for="fullNameCre" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullNameCre" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="emailCre" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailCre" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="phoneCre" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phoneCre" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="addressCre" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="addressCre" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-success" id="btnCreate" onclick="createCustomer()">
+                    <i class="fas fa-plus"></i>
+                    Create
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- -------------------------------------------------------------------------------------------------------- -->
+
+<!-- ----------------------------------------------------------------------------------------------- -->
+
+
+<!-- modal Update -->
+
+<div class="modal fade" id="modalUpdate" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Modal update</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="row mb-3 mt-3">
+                        <div class="col-lg-6">
+                            <label for="fullNameUp" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullNameUp">
+                            <input hidden type="number" class="form-control" id="idUp">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="emailUp" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailUp">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="phoneUp" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phoneUp">
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="addressUp" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="addressUp">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-outline-secondary" onclick="updateCustomer()">
+                    <i class="fas fa-pencil"></i>
+                    Update
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ----------------------------------------------------------------------------------------------------------- -->
+
+
+<!-- Modal Deposit -->
+<div class="modal fade" id="modalDeposit" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Modal Deposit</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="row mb-3 mt-3">
+                        <div class="col-lg-6">
+                            <label for="fullNameDep" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullNameDep" disabled>
+                            <input hidden type="number" class="form-control" id="idDep" disabled>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="emailDep" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailDep" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="balanceDep" class="form-label">Balance</label>
+                            <input type="number" class="form-control" id="balanceDep" disabled>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="transactionAmountDep" class="form-label">Transaction Amount</label>
+                            <input type="number" class="form-control" id="transactionAmountDep" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-success" onclick="deposit()">
+                    <i class="fas fa-plus"></i>
+                    Deposit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- -------------------------------------------------------------------------------------------------------- -->
+
+
+<!-- Modal Withdraw -->
+<div class="modal fade" id="modalWithdraw" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Modal Withdraw</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="row mb-3 mt-3">
+                        <div class="col-lg-6">
+                            <label for="fullNameWit" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="fullNameWit" disabled>
+                            <input hidden type="number" class="form-control" id="idWit" disabled>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="emailWit" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailWit" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-6">
+                            <label for="balanceWit" class="form-label">Balance</label>
+                            <input type="number" class="form-control" id="balanceWit" disabled>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="transactionAmountWit" class="form-label">Transaction Amount</label>
+                            <input type="number" class="form-control" id="transactionAmountWit" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-outline-success" onclick="withdraw()">
+                    <i class="fas fa-minus"></i>
+                    Withdraw
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- -------------------------------------------------------------------------------------------------------- -->
+<!-- Modal Transfer -->
+<div class="modal fade" id="modalTransfer" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5">Modal Transfer</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post">
+                    <div class="row mb-3 mt-3">
+                        <div class="col-lg-3">
+                            <label for="senderIdTra" class="form-label fw-bold">Sender ID</label>
+                            <input type="text" class="form-control" id="senderIdTra" readonly>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="senderNameTra" class="form-label fw-bold">Sender Name</label>
+                            <input type="text" class="form-control" id="senderNameTra" readonly>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="senderEmailTra" class="form-label fw-bold">Sender Email</label>
+                            <input type="email" class="form-control" id="senderEmailTra" readonly>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="senderBalanceTra" class="form-label fw-bold">Sender balance</label>
+                            <input type="text" class="form-control" id="senderBalanceTra" disabled>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-lg-3">
+                            <label class="form-label fw-bold">Recipient</label>
+                            <select class="form-select" name="recipientId" id="recipientSelectTra">
+                            </select>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="transferAmountTra" class="form-label fw-bold">Transfer amount</label>
+                            <input type="number" class="form-control" id="transferAmountTra">
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="feesTra" class="form-label fw-bold">Fees (%)</label>
+                            <input type="text" class="form-control" id="feesTra" value="10" readonly>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="transactionAmountTra" class="form-label fw-bold">Transaction amount</label>
+                            <input type="text" class="form-control" id="transactionAmountTra" readonly>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-outline-primary" id="btnTransfer" onclick="transfer()">
+                    <i class="fas fa-exchange-alt"></i>
+                    Transfer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- -------------------------------------------------------------------------------------------------------- -->
+
+<script>
+    const bodyCustomer = $('#tbCustomer tbody')
+    async function getAllCustomer() {
+        // const response = await fetch("http://localhost:3300/customers");
+        // const customers = await response.json();
+
+        const customers = await $.ajax({
+            url: "http://localhost:3300/customers",
+            type: "GET",
+        })
+        return customers;
+    }
+
+    // async function getAllTransfer() {
+    //     const response = await fetch("http://localhost:3300/transfer");
+    //     const transfer = await response.json();
+    //     return transfer;
+    // }
+    async function getCustomerById(id) {
+        // const response = await fetch("http://localhost:3300/customers/" + id);
+        //     const customer = await response.json();
+
+        const customer = await $.ajax({
+            url: "http://localhost:3300/customers/" + id,
+            type: "GET",
+        })
+        console.log(customer);
+        return customer
+    }
+    const renderPerson = (obj) => {
+        return `
+                <tr id="tr_${obj.id}">
+                    <td>${obj.id}</td>
+                    <td>${obj.fullName}</td>
+                    <td>${obj.email}</td>
+                    <td>${obj.phone}</td>
+                    <td>${obj.address}</td>
+                    <td>${obj.balance}</td>
+                    <td>
+                        <button class="btn btn-outline-secondary edit" onclick="updateCustomerShow(${obj.id})">
+                            <i class="far fa-edit"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-success" onclick="showDeposit(${obj.id})">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-warning" onclick="showWithdraw(${obj.id})">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-primary" onclick="showTransfer(${obj.id})">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-outline-danger" onclick="deleteCustomer(${obj.id})">
+                            <i class="fas fa-ban"></i>
+                        </button>
+                    </td>
+                </tr>
+            `
+    }
+    async function showListCustomer() {
+        var customers = await getAllCustomer();
+        customers.forEach(element => {
+            const str = renderPerson(element)
+            bodyCustomer.prepend(str);
+        });
+    }
+    showListCustomer();
+    const deleteCustomer = async (id) => {
+        // const response = await fetch("http://localhost:3300/customers/" + id, {
+        //     method: 'DELETE',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        // });
+        // const person = await response.json();
+
+        $.ajax({
+            url: "http://localhost:3300/customers/" + id,
+            type: "DELETE",
+        })
+    }
+    async function updateCustomerShow(id) {
+        // const customer = await getCustomerById(id);
+        // document.getElementById('idUp').value = customer.id;
+        // document.getElementById('fullNameUp').value = customer.fullName;
+        // document.getElementById('emailUp').value = customer.email
+        // document.getElementById('phoneUp').value = customer.phone
+        // document.getElementById('addressUp').value = customer.address
+        // openModal('modalUpdate');
+
+        const customer = await getCustomerById(id);
+        $('#idUp').val(customer.id)
+        $('#fullNameUp').val(customer.fullName)
+        $('#emailUp').val(customer.email)
+        $('#phoneUp').val(customer.phone)
+        $('#addressUp').val(customer.address)
+        $('#modalUpdate').modal('show')
+    }
+    async function updateCustomer() {
+        // const id = document.getElementById('idUp').value;
+        // const fullName = document.getElementById('fullNameUp').value;
+        // const email = document.getElementById('emailUp').value;
+        // const phone = document.getElementById('phoneUp').value;
+        // const address = document.getElementById('addressUp').value;
+        // const balance = 0;
+
+        const id = $('#idUp').val();
+        const fullName = $('#fullNameUp').val();
+        const email = $('#emailUp').val();
+        const phone = $('#phoneUp').val();
+        const address = $('#addressUp').val();
+        const obj = {
+            id,
+            fullName,
+            email,
+            phone,
+            address,
+        }
+        // const rawResponse = await fetch("http://localhost:3300/customers/" + id, {
+        //     method: 'PUT',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(obj)
+        // });
+
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/customers/" + id,
+            type: 'PATCH',
+            data: JSON.stringify(obj)
+        })
+        // const content = await rawResponse.json();
+        // console.log(obj);
+    }
+    function showCreateCustomer() {
+        $('#modalCreate').modal('show')
+    }
+    async function createCustomer() {
+        const fullName = $('#fullNameCre').val();
+        const email = $('#emailCre').val();
+        const phone = $('#phoneCre').val();
+        const address = $('#addressCre').val();
+        const balance = 0;
+        const obj = {
+            fullName,
+            email,
+            phone,
+            address,
+            balance,
+        }
+        // const rawResponse = await fetch("http://localhost:3300/customers/", {
+        //     method: 'POST',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(obj)
+        // });
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/customers/",
+            type: 'POST',
+            data: JSON.stringify(obj)
+        })
+    }
+    async function showDeposit(id) {
+        const customer = await getCustomerById(id)
+        $('#idDep').val(customer.id)
+        $('#fullNameDep').val(customer.fullName)
+        $('#emailDep').val(customer.email)
+        $('#balanceDep').val(customer.balance)
+        $('#transactionAmountDep').val(customer.transactionAmount)
+        $('#modalDeposit').modal('show')
+    }
+    async function deposit() {
+        const id = $('#idDep').val();
+        const fullName = $('#fullNameDep').val();
+        const email = $('#emailDep').val();
+        const balance = $('#balanceDep').val();
+        const transactionAmount = $('#transactionAmountDep').val();
+        const objDep = {
+            fullName,
+            email,
+            balance,
+            transactionAmount,
+        }
+        const newBalance = parseInt(balance) + parseInt(transactionAmount)
+        const objCus = {
+            "balance": newBalance,
+        }
+        // const rawResponseDeposit = await fetch("http://localhost:3300/deposit/", {
+        //     method: 'POST',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(objDep)
+        // });
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/deposit/",
+            type: 'POST',
+            data: JSON.stringify(objDep)
+        })
+        // const contentDeposit = await rawResponseDeposit.json();
+        // const rawResponseCustomer = await fetch("http://localhost:3300/customers/" + id, {
+        //     method: 'PATCH',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(objCus)
+        // });
+
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/customers/" + id,
+            type: 'PATCH',
+            data: JSON.stringify(objCus)
+        })
+
+    }
+
+
+    async function showWithdraw(id) {
+        const customer = await getCustomerById(id)
+        $('#modalWithdraw').modal("show")
+        $('#idWit').val(customer.id)
+        $('#fullNameWit').val(customer.fullName)
+        $('#emailWit').val(customer.email)
+        $('#balanceWit').val(customer.balance)
+        $('#transactionAmountWit').val(customer.transactionAmount)
+    }
+    async function withdraw() {
+        const id = $('#idWit').val();
+        const fullName = $('#fullNameWit').val();
+        const email = $('#emailWit').val();
+        const balance = $('#balanceWit').val();
+        const transactionAmount = $('#transactionAmountWit').val();
+        const objWit = {
+            fullName,
+            email,
+            balance,
+            transactionAmount,
+        }
+        const newBalance = parseInt(balance) - parseInt(transactionAmount)
+        const objCus = {
+            "balance": newBalance,
+        }
+        // const rawResponseWithdraw = await fetch("http://localhost:3300/withdraw/", {
+        //     method: 'POST',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(objWit)
+        // });
+
+
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/withdraw/",
+            type: 'POST',
+            data: JSON.stringify(objWit)
+        })
+
+        // const rawResponseCustomer = await fetch("http://localhost:3300/customers/" + id, {
+        //     method: 'PATCH',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(objCus)
+        // });
+        // const contentCustomer = await rawResponseCustomer.json();
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/customers/" + id,
+            type: 'PATCH',
+            data: JSON.stringify(objCus)
+        })
+
+
+    }
+    async function transfer() {
+        const idRecipient = $('#recipientSelectTra').val();
+        const recipient = await getCustomerById(idRecipient);
+        const idSender = $('#senderIdTra').val();
+        const nameSender = $('#senderNameTra').val();
+        const nameRecipient = recipient.fullName;
+        const transferAmount = $('#transferAmountTra').val();
+        const fees = $('#feesTra').val();
+        const transactionAmount = $('#transactionAmountTra').val();
+        // const timeTra = Date.now();
+        const objTra = {
+            idSender,
+            nameSender,
+            idRecipient,
+            nameRecipient,
+            transferAmount,
+            fees,
+            transactionAmount,
+            // timeTra,
+        }
+        const sender = await getCustomerById(idSender);
+        var newBalanceSender = $.parseInt(sender.balance) - $.parseInt(transactionAmount);
+        const objSender = {
+            "balance": newBalanceSender,
+        }
+        var newBalanceRecipent = parseInt(recipient.balance) + parseInt(transferAmount);
+        const objRecipient = {
+            "balance": newBalanceRecipent,
+        }
+        // const rawResponseTransfer = await fetch("http://localhost:3300/transfers/", {
+        //     method: 'POST',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(objTra)
+        // });
+
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/transfers/",
+            type: 'POST',
+            data: JSON.stringify(objTra)
+        })
+
+
+
+        //     const rawResponseSender = await fetch("http://localhost:3300/customers/" + sender.id, {
+        //     method: 'PATCH',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(objSender)
+        // });
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/customers/" + sender.id,
+            type: 'PATCH',
+            body: JSON.stringify(objSender)
+        }).done(function showDone() {
+            alert("trừ tiền thành công")
+        }).fail(function showFail() {
+            alert("trừ tiền thất bại")
+        })
+
+        // const rawResponseRecipient = await fetch("http://localhost:3300/customers/" + recipient.id, {
+        //     method: 'PATCH',
+        //     headers: {
+        //         "Content-type": "application/json; charset=UTF-8"
+        //     },
+        //     body: JSON.stringify(objRecipient)
+        // });
+
+        $.ajax({
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            },
+            url: "http://localhost:3300/customers/" + idRecipient,
+            type: 'PATCH',
+            body: JSON.stringify(objRecipient)
+        }).done(function showDone() {
+            alert("cộng tiền thành công")
+        }).fail(function showFail() {
+            alert("cộng tiền thất bại")
+        })
+        console.log(objTra);
+    }
+
+
+    async function showTransfer(id) {
+        const sender = await getCustomerById(id)
+        $('#modalTransfer').modal('show')
+        $('#senderIdTra').val(sender.id)
+        $('#senderNameTra').val(sender.fullName)
+        $('#senderEmailTra').val(sender.email)
+        $('#senderBalanceTra').val(sender.balance)
+        $('#feesTra').val(10)
+        $('#recipientSelectTra').html(await renderOption(id))
+    }
+    async function renderOption(id) {
+        const customers = await getAllCustomer();
+        var customersWithout = [];
+        customers.forEach(element => {
+            if (element.id !== id) {
+                customersWithout.push(element);
+            }
+        });
+        console.log(customersWithout);
+        var strOption = '';
+        customersWithout.forEach(element => {
+            strOption += `<option value="${element.id}"> ${element.id} - ${element.fullName}</option>`
+        });
+        return strOption;
+    }
+
+    async function showHistory() {
+        const transfers = await getAllTransfer();
+        openModal('modalHistory');
+    }
+
+    // function openModal(elem) {
+    //     let el = document.getElementById(elem);
+    //     new bootstrap.Modal(el).show();
+    // }
+    // function closeModal(elem) {
+    //     document.getElementById(elem).style.display = "none"
+    //     document.getElementById(elem).classList.remove("show")
+    //     document.querySelector('.modal-backdrop').remove();
+    //     document.querySelector('body').setAttribute('style', 'overflow: none')
+    // }
+
+    const transferAmountElem = $("#transferAmountTra");
+    const transactionAmountElem = $("#transactionAmountTra");
+    transferAmountElem.on("input", function () {
+        const transferAmount = +$(this).val();
+        const fees = 10;
+        const feesAmount = (transferAmount * fees) / 100;
+        transactionAmountElem.val(transferAmount + feesAmount);
+    });
+</script>
+</body>
+
+</html>
